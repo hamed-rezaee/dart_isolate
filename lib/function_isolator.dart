@@ -5,8 +5,8 @@ import 'dart:isolate';
 class FunctionIsolator<T> {
   /// Initializes a new instance of the [FunctionIsolator] class.
   FunctionIsolator(
-    this.function,
-    this.positionalArguments, [
+    this.function, [
+    this.positionalArguments,
     this.namedArguments,
   ]);
 
