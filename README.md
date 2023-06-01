@@ -1,4 +1,4 @@
-# FunctionIsolator
+# Function Isolator
 
 `FunctionIsolator` is a Dart class that allows you to execute a function in an isolate, which is a separate execution context. This can be useful for offloading heavy computations or tasks to separate threads.
 
