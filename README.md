@@ -58,7 +58,7 @@ void main() async {
 
 In this example, the `addNumbers` function is executed in an isolate with positional arguments `[2, 3]`. The result is obtained and printed to the console.
 
-5. Alternatively, you can use `Isolator Extension` to execute any function in an isolate, This extension allows you to call the isolator method directly on any function and execute it in an isolate.
+Alternatively, you can use `Isolator Extension` to execute any function in an isolate, This extension allows you to call the isolator method directly on any function and execute it in an isolate.
 
 ```dart
 // Define a function to be executed in the isolate.
