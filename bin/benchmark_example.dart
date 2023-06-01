@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dart_isolate_playground/function_isolator.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:dart_isolate_playground/function_isolator.dart';
+import 'package:dart_isolate_playground/function_isolator_extension.dart';
 
 class User {
   User(this.id, this.name, this.email);
@@ -26,19 +28,24 @@ void main() async {
   final Duration normalDuration = await calculateExecutionTime(() async {
     for (int i = 0; i < iterations; i++) {
       _parseUsers(jsonData);
-      print('Normal way: Parsed $i');
     }
   });
 
   final Duration isolateDuration = await calculateExecutionTime(() async {
     for (int i = 0; i < iterations; i++) {
       await _parseUsersIsolate(jsonData);
-      print('IsolateExecutor: Parsed $i');
     }
   });
 
-  print('### Normal way: Parsed in ${normalDuration.inMilliseconds}ms');
-  print('### IsolateExecutor: Parsed in ${isolateDuration.inMilliseconds}ms');
+  final Duration isolatorDuration = await calculateExecutionTime(() async {
+    for (int i = 0; i < iterations; i++) {
+      await _parseUsers.isolator(<dynamic>[jsonData]);
+    }
+  });
+
+  print('Normal way: Parsed in ${normalDuration.inMilliseconds}ms');
+  print('IsolateExecutor: Parsed in ${isolateDuration.inMilliseconds}ms');
+  print('Isolator: Parsed in ${isolatorDuration.inMilliseconds}ms');
 }
 
 List<User> _parseUsers(List<dynamic> jsonData) =>
