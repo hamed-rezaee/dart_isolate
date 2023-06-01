@@ -4,14 +4,7 @@
 
 ## Usage
 
-1. Import the necessary Dart libraries:
-
-```dart
-import 'dart:async';
-import 'dart:isolate';
-```
-
-2. Create an instance of `FunctionIsolator` by passing the function and its optional arguments:
+1. Create an instance of `FunctionIsolator` by passing the function and its optional arguments:
 
 ```dart
 final isolator = FunctionIsolator(function, positionalArguments, namedArguments);
@@ -23,7 +16,7 @@ final isolator = FunctionIsolator(function, positionalArguments, namedArguments)
 
 `namedArguments` (optional): The named arguments to be passed to the function.
 
-3. Execute the function in the isolate by calling the call method:
+2. Execute the function in the isolate by calling the call method:
 
 ```dart
 final result = await isolator();
@@ -31,7 +24,7 @@ final result = await isolator();
 
 The `call` method returns a Future that completes with the result of type `T` when the function execution is finished.
 
-4. Handle the result or any potential exceptions:
+3. Handle the result or any potential exceptions:
 
 ```dart
 try {
