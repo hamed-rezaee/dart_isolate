@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 
 import 'package:dart_isolate_playground/function_isolator.dart';
 import 'package:dart_isolate_playground/function_isolator_extension.dart';
@@ -18,41 +15,35 @@ class User {
 }
 
 void main() async {
-  final http.Response response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
+  final Duration normalDuration =
+      await calculateExecutionTime(() => heavyCalculations());
 
-  final dynamic jsonData = json.decode(response.body);
+  final Duration isolateDuration = await calculateExecutionTime(
+    () async => const FunctionIsolator<void>()(heavyCalculations),
+  );
 
-  const int iterations = 1000;
-
-  final Duration normalDuration = await calculateExecutionTime(() async {
-    for (int i = 0; i < iterations; i++) {
-      _parseUsers(jsonData);
-    }
-  });
-
-  final Duration isolateDuration = await calculateExecutionTime(() async {
-    for (int i = 0; i < iterations; i++) {
-      await _parseUsersIsolate(jsonData);
-    }
-  });
-
-  final Duration isolatorDuration = await calculateExecutionTime(() async {
-    for (int i = 0; i < iterations; i++) {
-      await _parseUsers.isolator(<dynamic>[jsonData]);
-    }
-  });
+  final Duration isolatorDuration = await calculateExecutionTime(
+    () async => heavyCalculations.isolator(),
+  );
 
   print('Normal way: Parsed in ${normalDuration.inMilliseconds}ms');
   print('IsolateExecutor: Parsed in ${isolateDuration.inMilliseconds}ms');
   print('Isolator: Parsed in ${isolatorDuration.inMilliseconds}ms');
 }
 
-List<User> _parseUsers(List<dynamic> jsonData) =>
-    jsonData.map((dynamic json) => User.fromJson(json)).toList();
+void heavyCalculations() {
+  for (int i = 0; i < 1000; i++) {
+    calculateFactorial(1000);
+  }
+}
 
-Future<List<User>> _parseUsersIsolate(List<dynamic> jsonData) async =>
-    FunctionIsolator<List<User>>(_parseUsers, <dynamic>[jsonData])();
+int calculateFactorial(int n) {
+  if (n == 0) {
+    return 1;
+  }
+
+  return n * calculateFactorial(n - 1);
+}
 
 Future<Duration> calculateExecutionTime(Function function) async {
   final Stopwatch stopwatch = Stopwatch()..start();

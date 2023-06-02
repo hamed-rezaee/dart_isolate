@@ -7,5 +7,5 @@ extension IsolatorExtension on Function {
     final List<dynamic>? positionalArguments,
     final Map<Symbol, dynamic>? namedArguments,
   ]) async =>
-      FunctionIsolator<T>(this, positionalArguments, namedArguments)();
+      FunctionIsolator<T>()(this, positionalArguments, namedArguments);
 }
