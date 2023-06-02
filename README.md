@@ -4,31 +4,37 @@
 
 ## Usage
 
-1. Create an instance of `FunctionIsolator` by passing the function and its optional arguments:
+1. Create an instance of `FunctionIsolator`:
 
 ```dart
-final isolator = FunctionIsolator(function, positionalArguments, namedArguments);
+final isolator = FunctionIsolator();
 ```
-
-`function`: The function to be executed in the isolate.
-
-`positionalArguments` (optional): The positional arguments to be passed to the function.
-
-`namedArguments` (optional): The named arguments to be passed to the function.
 
 2. Execute the function in the isolate by calling the call method:
 
 ```dart
-final result = await isolator();
+final result = await isolator.call(function, positionalArguments, namedArguments);
+```
+
+Since the `call` method is the _default method_, you can also call it directly:
+
+```dart
+final result = await isolator(function, positionalArguments, namedArguments);
 ```
 
 The `call` method returns a Future that completes with the result of type `T` when the function execution is finished.
+
+- `function`: The function to be executed in the isolate.
+
+- `positionalArguments` (optional): The positional arguments to be passed to the function.
+
+- `namedArguments` (optional): The named arguments to be passed to the function.
 
 3. Handle the result or any potential exceptions:
 
 ```dart
 try {
-  final result = await isolator.call();
+  final result = await isolator(function, positionalArguments, namedArguments);
   // Handle the result.
 } catch (e) {
   // Handle the exception.
@@ -44,10 +50,10 @@ Here's an example that demonstrates how to use `FunctionIsolator`:
 int addNumbers(int a, int b) => a + b;
 
 void main() async {
-  final isolator = FunctionIsolator(addNumbers, [2, 3]);
+  final isolator = FunctionIsolator<int>();
 
   try {
-    final result = await isolator();
+    final result = await isolator(addNumbers, [2, 3]);
 
     print(result); // Output: 5
   } catch (e) {
@@ -66,7 +72,7 @@ int addNumbers(int a, int b) => a + b;
 
 void main() async {
   try {
-    final result = await addNumbers.isolator<int>([2, 3]);
+    final result = await addNumbers.isolator([2, 3]);
 
     print(result); // Output: 5
   } catch (e) {
