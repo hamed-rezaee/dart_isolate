@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:dart_isolate_playground/function_isolator.dart';
 import 'package:dart_isolate_playground/function_isolator_extension.dart';
@@ -26,14 +27,19 @@ void main() async {
     () async => heavyCalculations.isolator(),
   );
 
+  final Duration isolateRunDuration = await calculateExecutionTime(
+    () async => Isolate.run(() => heavyCalculations()),
+  );
+
   print('Normal way: Parsed in ${normalDuration.inMilliseconds}ms');
-  print('IsolateExecutor: Parsed in ${isolateDuration.inMilliseconds}ms');
+  print('Isolate Executor: Parsed in ${isolateDuration.inMilliseconds}ms');
   print('Isolator: Parsed in ${isolatorDuration.inMilliseconds}ms');
+  print('Isolate Run: Parsed in ${isolateRunDuration.inMilliseconds}ms');
 }
 
 void heavyCalculations() {
   for (int i = 0; i < 1000; i++) {
-    calculateFactorial(1000);
+    calculateFactorial(10000);
   }
 }
 
